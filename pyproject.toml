@@ -8,7 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 plexapi = "^4.15.7"
-ffmpeg-python = "^0.2.0"
+tqdm = "^4.66.1"
+audioread = "^3.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.1"
