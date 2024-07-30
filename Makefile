@@ -26,3 +26,6 @@ create_crontab:
 
 delete_crontab:
 	sudo crontab -u $(USER) -r
+
+install:
+	poetry run python addCustomScripts.py
