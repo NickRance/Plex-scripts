@@ -44,12 +44,23 @@ def get_duration(file_path: Path) -> int:
 
 
 def isTrackAMixCompilation(duration: int) -> bool:
+    """
+    Function to check if a track exceeds the length threshold, indicating it might be a mix compilation.
+
+    Args:
+        duration (int): Duration of the track in seconds.
+
+    Returns:
+        bool: True if duration exceeds length threshold, False otherwise.
+    """
     #    duration = get_duration_ffmpeg(file_path)
     return duration > length_threshold * 60
 
 
 def getTargetPlaylist(plex: PlexServer, target_playlist: str):
+    # print(list(map(lambda p: p.title,plex.playlists() )))
     playlists = plex.playlists(title=target_playlist)
+    # print(target_playlist)
     if len(playlists) == 1:
         return playlists[0]
     else:
@@ -73,19 +84,28 @@ def driver(complete: bool):
     plex = PlexServer(base_url, plex_api_token)
     search_playlist = getTargetPlaylist(plex, search_playlist_title)
     destination_playlist = getTargetPlaylist(plex, target_playlist)
-    desination_playlist_contents = []
+    destination_playlist_contents = []
+    if not search_playlist:
+        print(f"Error finding search playlist {search_playlist_title}")
+        return
+    if not destination_playlist:
+        print(f"Error finding search playlist {target_playlist}")
+        return
     if destination_playlist:
         print(f"Fetching contents of {target_playlist}")
-        desination_playlist_contents = destination_playlist.items()
-        print(f"Found {len(desination_playlist_contents)} items in the playlist")
+        destination_playlist_contents = destination_playlist.items()
+        print(f"Found {len(destination_playlist_contents)} items in the playlist")
     uncheckedTracks = list(
-        filter(lambda x: x not in desination_playlist_contents, search_playlist.items())
+        filter(lambda x: x not in destination_playlist_contents, search_playlist.items())
     )
     longTracks = list(
         filter(
-            lambda x: isTrackAMixCompilation(get_duration(Path(x.locations[0]))),
-        tqdm(uncheckedTracks, desc="Analyzing track durations"),
+            lambda x: isTrackAMixCompilation(x.duration//1000), tqdm(uncheckedTracks, desc="Analyzing track durations")
         )
+        # filter(
+        #     lambda x: isTrackAMixCompilation(get_duration(Path(x.locations[0]))),
+        # tqdm(uncheckedTracks, desc="Analyzing track durations"),
+        # )
     )
     print(f"Found {len(longTracks)} long tracks")
     ## Create playlist if it does not exist

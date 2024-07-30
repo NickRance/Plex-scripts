@@ -45,7 +45,7 @@ def addToCron() :
         # os.system(f"echo '0 0 * * * {path}' | crontab -")
 
 if __name__ == "__main__":
-    # validation_filesexist = map(lambda x: os.path.exists(x), PATHS_TO_SCRIPTS)
-    # assert(all(validation_filesexist)), "Not all script paths exist"
-    # install()
+    validation_filesexist = map(lambda x: os.path.exists(x), PATHS_TO_SCRIPTS)
+    assert(all(validation_filesexist)), "Not all script paths exist"
+    install()
     addToCron()
