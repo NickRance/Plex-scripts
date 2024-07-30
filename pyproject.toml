@@ -7,13 +7,15 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.13"
 plexapi = "^4.15.7"
 tqdm = "^4.66.1"
 audioread = "^3.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.1"
+pyinstaller = "^6.9.0"
+python-crontab = "^3.2.0"
 
 [build-system]
 requires = ["poetry-core"]

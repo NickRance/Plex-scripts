@@ -27,33 +27,27 @@ base_url = f"http://{plex_ip}:{plex_port}"
 # Target Playlist
 DELETION_PLAYLIST = 'Deletion_Queue'
 
-"""
-Delete all playlists from Plex using PlexAPI
-
-https://github.com/mjs7231/python-plexapi
-"""
-
 from plexapi.server import PlexServer
-import requests
 
 plex = PlexServer(base_url, plex_api_token)
-
+# https://www.reddit.com/r/PleX/comments/bmxcya/going_mad_with_plexapi_filenames_from_playlist/
 tmp_lst = []
 def clear_deletion_queue(playlist_name:str):
 	count = 0
 	deletedFiles = []
 	for media_list in [x for x in plex.playlist(playlist_name).items()]:
 		for media in media_list:
+			filepath = "".join([x.file for x in media_list.iterParts()])
 			print(f"Deleting {media.title}")
 			media.delete()
 			count += 1
-			deletedFiles("".join(media.iterParts()))
+			deletedFiles.append(filepath)
 	print(f"Deleted {count} items from {playlist_name}")
 	return count, deletedFiles
 
 if __name__ == '__main__':
-	from requests import Session
 	from argparse import ArgumentParser
 	parser = ArgumentParser(description="Delete all tracks rated as one star or fewer")
 	parser.add_argument('-p', '--playlist', help='Playlist name to delete tracks from', default=DELETION_PLAYLIST)
+	args=parser.parse_args()
 	clear_deletion_queue(args.playlist)

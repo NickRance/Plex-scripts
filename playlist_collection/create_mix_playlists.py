@@ -7,18 +7,17 @@ from tqdm import tqdm
 plex_ip = ""
 plex_port = ""
 plex_api_token = ""
-target_playlist = ""
 
 #Config
 
-all_music_playlist = "All Music"
-recently_added_playlist = "Recently Added"
+all_music_playlist = "All_Music"
+recently_added_playlist = "Recently_Added"
+target_playlist = "Mixes" # Playlist to add the long tracks to
 
 # Environmental Variables
-plex_ip = getenv("plex_ip", plex_ip)
-plex_port = getenv("plex_port", plex_port)
-plex_api_token = getenv("plex_api_token", plex_api_token)
-target_playlist = getenv("target_playlist", target_playlist)
+plex_ip = getenv("PLEX_IP", plex_ip)
+plex_port = getenv("PLEX_PORT", plex_port)
+plex_api_token = getenv("PLEX_API_KEY", plex_api_token)
 base_url = f"http://{plex_ip}:{plex_port}"
 
 
@@ -65,6 +64,7 @@ def duration_detector(length: int | float):
     seconds = length  # calculate in seconds 
 
     return hours, mins, seconds 
+
 def driver(complete: bool):
     if complete:
         search_playlist_title = all_music_playlist
